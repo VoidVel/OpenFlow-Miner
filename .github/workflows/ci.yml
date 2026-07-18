@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      # Keep supply-chain advisories visible even though NU1903 is suppressed in the build
+      # (unfixed transitive Microsoft.OpenApi advisory). Informational, never fails the job.
+      - name: Report vulnerable packages
+        continue-on-error: true
+        run: dotnet list package --vulnerable --include-transitive
+
+      # Warnings-as-errors is on via Directory.Build.props; -warnaserror is belt-and-suspenders.
+      - name: Build
+        run: dotnet build --configuration Release --no-restore -warnaserror
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+      # The API contract IS the product — publish the generated OpenAPI document so
+      # contract drift is visible in PRs. (Wired up in Milestone 3.)
+      - name: Export OpenAPI document
+        if: hashFiles('src/OpenFlowMiner.Api/**') != ''
+        continue-on-error: true
+        run: |
+          dotnet build src/OpenFlowMiner.Api --configuration Release --no-restore || true
+
+      - name: Upload OpenAPI artifact
+        if: hashFiles('**/openapi.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi
+          path: '**/openapi.json'
+          if-no-files-found: ignore

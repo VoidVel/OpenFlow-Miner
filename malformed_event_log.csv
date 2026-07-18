@@ -1,0 +1,6 @@
+case_id,activity,timestamp
+case-101,Order Placed,2026-01-01T09:00:00Z
+case-101,Payment Received,2026-01-13-01T09:05:00Z
+case-102,Order Placed,
+case-102,Shipped,2026-01-01T11:00:00Z
+,Payment Received,2026-01-01T09:10:00Z

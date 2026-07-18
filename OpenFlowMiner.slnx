@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/OpenFlowMiner.Benchmarks/OpenFlowMiner.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/OpenFlowMiner.Demo/OpenFlowMiner.Demo.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/OpenFlowMiner.Api/OpenFlowMiner.Api.csproj" />
+    <Project Path="src/OpenFlowMiner.Core/OpenFlowMiner.Core.csproj" />
+    <Project Path="src/OpenFlowMiner.Ingestion/OpenFlowMiner.Ingestion.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenFlowMiner.Api.Tests/OpenFlowMiner.Api.Tests.csproj" />
+    <Project Path="tests/OpenFlowMiner.Core.Tests/OpenFlowMiner.Core.Tests.csproj" />
+    <Project Path="tests/OpenFlowMiner.Ingestion.Tests/OpenFlowMiner.Ingestion.Tests.csproj" />
+  </Folder>
+</Solution>

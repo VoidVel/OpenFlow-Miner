@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenFlowMiner.Core\OpenFlowMiner.Core.csproj" />
+    <ProjectReference Include="..\OpenFlowMiner.Ingestion\OpenFlowMiner.Ingestion.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Ship the real demo dataset next to the app so the pinned 'receipt' log seeds on startup. -->
+    <Content Include="..\..\samples\data\receipt.csv" Link="demo-data\receipt.csv" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+    <!-- Pinned to the latest release; brought in transitively by Microsoft's own OpenAPI stack. -->
+    <PackageReference Include="Microsoft.OpenApi" Version="2.3.5" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.16.15" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!--
+      NU1903 (NuGet audit) flags Microsoft.OpenApi for GHSA-v5pm-xwqc-g5wc. It is a transitive
+      dependency of Microsoft.AspNetCore.OpenApi (Microsoft's official package) with no patched
+      release available at time of writing, so it cannot be resolved by pinning. Suppressed here so
+      it does not break the warnings-as-errors build; CI still surfaces it via a non-failing
+      "dotnet list package" vulnerability-scan step. Revisit when a fixed version ships.
+    -->
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
+  </PropertyGroup>
+
+</Project>

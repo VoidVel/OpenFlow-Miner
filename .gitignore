@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.user
+
+# Rider / VS
+.idea/
+.vs/
+*.suo
+
+# Test / coverage
+[Tt]est[Rr]esults/
+coverage/
+*.trx
+BenchmarkDotNet.Artifacts/
+
+# OS
+.DS_Store
+Thumbs.db
