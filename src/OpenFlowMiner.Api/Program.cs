@@ -1,4 +1,5 @@
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
 using OpenFlowMiner.Api;
 using OpenFlowMiner.Api.ApiKeys;
 using OpenFlowMiner.Api.Configuration;
@@ -8,6 +9,14 @@ using OpenFlowMiner.Ingestion;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Trust reverse proxy headers (for platforms like Render, Azure, etc.)
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 // Options
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Ingestion"));
@@ -63,6 +72,9 @@ builder.Services.AddRateLimiter(options =>
 });
 
 var app = builder.Build();
+
+// Process forwarded headers from reverse proxy
+app.UseForwardedHeaders();
 
 app.UseExceptionHandler();
 app.UseStatusCodePages();
